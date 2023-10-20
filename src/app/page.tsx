@@ -10,12 +10,16 @@ import { useState } from "react";
 export default function Home() {
 
   const [description, setDescription] = useState<string>("")
-  const [value, setValue] = useState<number>(0)
+  const [value, setValue] = useState<number> (0)
   const [operations, setOperations] = useState<any[]>([])
   const [selectedOption, setSelectedOption] = useState<string>("deposit")
-  const [typeOfDeposit, setTypeOfDeposit] = useState<boolean>(false) // true = + // false = -
+  const [typeOfDeposit, setTypeOfDeposit] = useState<boolean>(false) 
   const [valueColor, setValueColor] = useState<string>("black")
   const [sign, setSign] = useState<string>("")
+  const [totalDepositValue, setTotalDepositValue] = useState<number>(0)
+  const [totalOutputValue, setTotalOutPutValue] = useState<number>(0)
+  const [difference, setDifference] = useState<number>(0)
+
 
   const addNewOperation = () => {
     
@@ -24,19 +28,29 @@ export default function Home() {
       return
     }
     
-    let newValueColor = selectedOption === "deposit" ? "green" : "red";
-    let newSign = selectedOption === "deposit" ? "+" : "-"
+    const newValueColor = selectedOption === "deposit" ? "green" : "red";
+    const newSign = selectedOption === "deposit" ? "+" : "-";
     
-    setOperations([
+    setOperations((prevOperations) => [
       {
         id: Math.floor(Math.random() * 1000000),
         description: description,
-        value: value,
+        value: Number(value),
         valueColor: newValueColor,
         sign: newSign
       },
-      ...operations
+      ...prevOperations
     ])
+
+    const differenceTotal = totalDepositValue - totalOutputValue;
+    const sign = difference >= 0 ? "+" : "-";
+    setDifference((prev) => prev + differenceTotal)
+
+    if (newValueColor === "green") {
+      setTotalDepositValue((prev) => prev + value);
+    } else if (newValueColor === "red") {
+      setTotalOutPutValue((prev) => prev + value);
+    }
 
     setDescription("")
     setValue(0)
@@ -52,23 +66,46 @@ export default function Home() {
     return alert("Cliquei em editar")
   }
 
+  const calculateTotalValue = (color: string) => {
+    const filteredOperations = operations.filter(operation => operation.valueColor === color);
+    const totalValue = Number(filteredOperations.reduce((current: number, operation: any) => current + operation.value, 0));
+    return totalValue;
+    
+  };
+
+
+
   return (
     <main className="flex min-h-screen w-screen max-w-full items-center justify-center bg-gray-500">
       
       <div className="flex flex-col gap-7 max-w-7xl w-full h-full px-2 my-[50px]">
 
         <div className="flex flex-wrap gap-5">
-          <Cards text="Entradas" icon={<IconCircleArrowUp/>} sign="+" value={0}/>
-          <Cards text="Saídas" icon={<IconCircleArrowDown/>} sign="-" value={0}/>
-          <Cards text="Total" icon={<IconBrandCashapp/>} value={0}/>
+          <Cards text="Entradas" icon={<IconCircleArrowUp/>} sign="+" totalValue={calculateTotalValue("green")}/>
+          <Cards text="Saídas" icon={<IconCircleArrowDown/>} sign="-" totalValue={calculateTotalValue("red")}/>
+          <Cards text="Total" icon={<IconBrandCashapp/>} totalValue={difference}/>
         </div>
 
         <div>
-          <Descriptions description={description} setDescription={setDescription} value={value} setValue={setValue} clickButton={addNewOperation} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
+          <Descriptions 
+            description={description} 
+            setDescription={setDescription} 
+            value={value} 
+            setValue={setValue} 
+            clickButton={addNewOperation} 
+            selectedOption={selectedOption} 
+            setSelectedOption={setSelectedOption} 
+          />
         </div>
 
         <div className="table">
-          <Table remove={removeOperation} edit={editOperation} operations={operations} valueColor={valueColor} sign={sign}/>
+          <Table 
+            remove={removeOperation} 
+            edit={editOperation} 
+            operations={operations} 
+            valueColor={valueColor} 
+            sign={sign}
+          />
         </div>
           
       </div>

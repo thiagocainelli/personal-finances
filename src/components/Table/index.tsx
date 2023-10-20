@@ -10,6 +10,7 @@ interface TableTypes {
 }
 
 export default function Table ({operations, remove, edit, valueColor, sign}: TableTypes) {
+    
     return (
         <>
             <table className="w-full rounded-md">
