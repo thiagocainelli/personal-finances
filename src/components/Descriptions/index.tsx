@@ -3,10 +3,13 @@ interface InputsTypes {
     setDescription: (ev:any) => void,
     value: number,
     setValue: (ev: any) => void,
-    clickButton: any
+    clickButton: any,
+    selectedOption: string,
+    setSelectedOption: (ev: any) => void
+    
 }
 
-export default function Descriptions ({description, setDescription, value, setValue, clickButton}: InputsTypes) {  
+export default function Descriptions ({description, setDescription, value, setValue, clickButton, selectedOption, setSelectedOption}: InputsTypes) {  
     return (
         <>
             <div className="flex flex-col gap-3 items-center justify-between md:flex-row px-5 py-3 text-gray-900 bg-white rounded-md">
@@ -36,6 +39,9 @@ export default function Descriptions ({description, setDescription, value, setVa
                             type="radio"
                             name="transition"
                             id="depositMoney"
+                            value="deposit"
+                            checked={selectedOption === "deposit"}
+                            onChange={(ev) => setSelectedOption(ev.target.value)}
                         />
                         <label className="ms-1" htmlFor="depositMoney">Entrada</label>
                     </div>
@@ -45,6 +51,9 @@ export default function Descriptions ({description, setDescription, value, setVa
                             type="radio"
                             name="transition"
                             id="outMoney"
+                            value="out"
+                            checked={selectedOption === "out"}
+                            onChange={(ev) => setSelectedOption(ev.target.value)}
                         />
                         <label className="ms-1" htmlFor="outMoney">Saida</label>
                     </div>
