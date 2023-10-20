@@ -1,0 +1,17 @@
+table {
+    background-color: white;
+}
+
+tr, td, th {
+    border: 1px solid rgba(0, 0, 0, 0.178);
+    color: rgba(0, 0, 0, 0.644);
+}
+
+td {
+    padding: 10px 30px;
+}
+
+th {
+    text-align: left;
+    padding: 10px 30px;
+}

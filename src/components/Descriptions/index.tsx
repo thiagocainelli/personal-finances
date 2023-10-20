@@ -9,7 +9,7 @@ interface InputsTypes {
 export default function Descriptions ({description, setDescription, value, setValue, clickButton}: InputsTypes) {  
     return (
         <>
-            <div className="flex items-center justify-between px-5 py-2 text-gray-900 bg-white">
+            <div className="flex flex-col gap-3 items-center justify-between md:flex-row px-5 py-3 text-gray-900 bg-white rounded-md">
                 <div>
                     <p>Descrição</p>
                     <input
