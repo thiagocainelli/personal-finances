@@ -4,8 +4,15 @@ import Cards from "@/components/Cards";
 import Descriptions from "@/components/Descriptions";
 import Table from "@/components/Table";
 import { IconCircleArrowUp, IconCircleArrowDown, IconBrandCashapp } from "@tabler/icons-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import './styles/Home.css'
 
+interface StoredData {
+  operations: any[];
+  totalDepositValue: number;
+  totalOutputValue: number;
+  difference: number;
+}
 
 export default function Home() {
 
@@ -13,77 +20,93 @@ export default function Home() {
   const [value, setValue] = useState<number> (0)
   const [operations, setOperations] = useState<any[]>([])
   const [selectedOption, setSelectedOption] = useState<string>("deposit")
-  const [typeOfDeposit, setTypeOfDeposit] = useState<boolean>(false) 
-  const [valueColor, setValueColor] = useState<string>("black")
-  const [sign, setSign] = useState<string>("")
   const [totalDepositValue, setTotalDepositValue] = useState<number>(0)
   const [totalOutputValue, setTotalOutPutValue] = useState<number>(0)
-  const [difference, setDifference] = useState<number>(0)
+  const [difference, setDifference] = useState<number>(totalDepositValue - totalOutputValue);
 
 
+  // Função para adicionar uma nova operação
   const addNewOperation = () => {
     
     if (description.length <= 0 || value <= 0) {
       alert("Por favor verifique os dados informados e tente novamente.")
-      return
+      return;
     }
     
     const newValueColor = selectedOption === "deposit" ? "green" : "red";
     const newSign = selectedOption === "deposit" ? "+" : "-";
+    const newValue = Number(value);
     
-    setOperations((prevOperations) => [
-      {
-        id: Math.floor(Math.random() * 1000000),
-        description: description,
-        value: Number(value),
-        valueColor: newValueColor,
-        sign: newSign
-      },
-      ...prevOperations
-    ])
-
-    const differenceTotal = totalDepositValue - totalOutputValue;
-    const sign = difference >= 0 ? "+" : "-";
-    setDifference((prev) => prev + differenceTotal)
+    const newOperation = {
+      id: Math.floor(Math.random() * 1000000),
+      description: description,
+      value: newValue,
+      valueColor: newValueColor,
+      sign: newSign
+    };
+  
+    setOperations((prevOperations) => [newOperation, ...prevOperations])
 
     if (newValueColor === "green") {
-      setTotalDepositValue((prev) => prev + value);
+      setTotalDepositValue((prev: number) => prev + newValue);
+
     } else if (newValueColor === "red") {
-      setTotalOutPutValue((prev) => prev + value);
+      setTotalOutPutValue((prev: number) => prev + newValue);
+      
     }
 
+    setDifference((prev) => prev + (newValueColor === "green" ? newValue : -newValue));
     setDescription("")
     setValue(0)
+
   }
 
-
+  // Função para remover uma operação específica
   const removeOperation = (operationID: number) => {
-    setOperations(operations.filter((operation) => operation.id !== operationID ))
-  }
-
-
-  const editOperation = () => {
-    return alert("Cliquei em editar")
-  }
-
-  const calculateTotalValue = (color: string) => {
-    const filteredOperations = operations.filter(operation => operation.valueColor === color);
-    const totalValue = Number(filteredOperations.reduce((current: number, operation: any) => current + operation.value, 0));
-    return totalValue;
+    const removedOperation = operations.find(operation => operation.id === operationID);
     
+    if (removedOperation) {
+      const removedValue = removedOperation.value;
+      const removedColor = removedOperation.valueColor;
+      
+      if (operations) {
+        setOperations(prevOperations => prevOperations.filter(operation => operation.id !== operationID));
+      }
+      
+      if (removedColor === 'green') {
+        setTotalDepositValue(prev => prev - removedValue);
+      } else if (removedColor === 'red') {
+        setTotalOutPutValue(prev => prev - removedValue);
+      }
+      
+      setDifference(prevDifference => prevDifference - (removedColor === 'green' ? removedValue : -removedValue));
+    }
+
+  }
+
+  // Função para calcular o valor total tanto de entradas quanto de saídas
+  const calculateTotalValue = (color: string) => {
+    if (operations) {
+      const filteredOperations = operations.filter(operation => operation.valueColor === color);
+      const totalValue = Number(filteredOperations.reduce((current: number, operation: any) => current + operation.value, 0));
+      return totalValue;
+    } else {
+      return 0; // Ou outro valor padrão, caso operations seja undefined ou null
+    }
   };
 
 
-
   return (
-    <main className="flex min-h-screen w-screen max-w-full items-center justify-center bg-gray-500">
+    <main className="background flex min-h-screen w-screen max-w-full items-center justify-center ">
       
       <div className="flex flex-col gap-7 max-w-7xl w-full h-full px-2 my-[50px]">
+        
+        <h1 className="text-white text-5xl text-center font-black">Controle Financeiro</h1>
 
         <div className="flex flex-wrap gap-5">
           <Cards text="Entradas" icon={<IconCircleArrowUp/>} sign="+" totalValue={calculateTotalValue("green")}/>
           <Cards text="Saídas" icon={<IconCircleArrowDown/>} sign="-" totalValue={calculateTotalValue("red")}/>
-          <Cards text="Total" icon={<IconBrandCashapp/>} totalValue={difference}/>
+          <Cards text="Total" icon={<IconBrandCashapp/>} sign={difference >= 0 ? "+" : "-"} totalValue={difference}/>
         </div>
 
         <div>
@@ -101,11 +124,9 @@ export default function Home() {
         <div className="table">
           <Table 
             remove={removeOperation} 
-            edit={editOperation} 
             operations={operations} 
-            valueColor={valueColor} 
-            sign={sign}
           />
+
         </div>
           
       </div>

@@ -1,15 +1,13 @@
-import { IconEdit, IconTrash } from "@tabler/icons-react";
+import { IconTrash } from "@tabler/icons-react";
 import "./Table.css";
 
 interface TableTypes {
     operations: any,
     remove: any,
-    edit: any,
-    valueColor: string
-    sign: string
+    
 }
 
-export default function Table ({operations, remove, edit, valueColor, sign}: TableTypes) {
+export default function Table ({operations, remove}: TableTypes) {
     
     return (
         <>
@@ -23,22 +21,21 @@ export default function Table ({operations, remove, edit, valueColor, sign}: Tab
                </thead>
 
                <tbody>
-                        {operations.map((operation: any) => (
-                            <tr key={operation.id}>
-                                <td>{operation.description}</td>
-                                <td className={`text-${operation.valueColor}-600`}>{operation.sign} R$ {operation.value}</td>
-                                <td className="w-[15%]">
-                                    <div className="flex items-center justify-center gap-2">
-                                        <button onClick={edit}>
-                                            <IconEdit width={30} height={30} color="blue" />
-                                        </button>
-                                        <button onClick={() => remove(operation.id)}>
-                                            <IconTrash width={30} height={30} color="red" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                    {operations && operations.map((operation: any) => (
+                        <tr key={operation.id}>
+                            <td>{operation.description}</td>
+                            <td className={operation.valueColor === "green" ? "text-green-600" : "text-red-600"}>
+                                {operation.valueColor === "green" ? "+" : "-"} R$ {operation.value.toFixed(2)}
+                            </td>
+                            <td className="w-[15%]">
+                                <div className="w-full flex items-center justify-center">
+                                    <button onClick={() => remove(operation.id)}>
+                                        <IconTrash color="red" />
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </>
