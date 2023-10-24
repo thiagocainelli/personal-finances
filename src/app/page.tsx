@@ -3,21 +3,15 @@
 import Cards from "@/components/Cards";
 import Descriptions from "@/components/Descriptions";
 import Table from "@/components/Table";
-import { IconCircleArrowUp, IconCircleArrowDown, IconBrandCashapp } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { IconCircleArrowUp, IconCircleArrowDown, IconCash } from "@tabler/icons-react";
+import { useState } from "react";
 import './styles/Home.css'
 
-interface StoredData {
-  operations: any[];
-  totalDepositValue: number;
-  totalOutputValue: number;
-  difference: number;
-}
 
 export default function Home() {
 
   const [description, setDescription] = useState<string>("")
-  const [value, setValue] = useState<number> (0)
+  const [value, setValue] = useState<number>(0)
   const [operations, setOperations] = useState<any[]>([])
   const [selectedOption, setSelectedOption] = useState<string>("deposit")
   const [totalDepositValue, setTotalDepositValue] = useState<number>(0)
@@ -91,22 +85,22 @@ export default function Home() {
       const totalValue = Number(filteredOperations.reduce((current: number, operation: any) => current + operation.value, 0));
       return totalValue;
     } else {
-      return 0; // Ou outro valor padrão, caso operations seja undefined ou null
+      return 0; 
     }
   };
 
 
   return (
-    <main className="background flex min-h-screen w-screen max-w-full items-center justify-center ">
+    <main className="background flex min-h-screen w-screen max-w-full items-center justify-center">
       
-      <div className="flex flex-col gap-7 max-w-7xl w-full h-full px-2 my-[50px]">
+      <div className="flex flex-col gap-7 max-w-7xl w-full h-full px-2 my-[30px]">
         
-        <h1 className="text-white text-5xl text-center font-black">Controle Financeiro</h1>
+        <h1 className="text-white text-6xl text-center mt-[-20px] mb-5">Controle Financeiro</h1>
 
         <div className="flex flex-wrap gap-5">
-          <Cards text="Entradas" icon={<IconCircleArrowUp/>} sign="+" totalValue={calculateTotalValue("green")}/>
-          <Cards text="Saídas" icon={<IconCircleArrowDown/>} sign="-" totalValue={calculateTotalValue("red")}/>
-          <Cards text="Total" icon={<IconBrandCashapp/>} sign={difference >= 0 ? "+" : "-"} totalValue={difference}/>
+          <Cards text="Entradas" icon={<IconCircleArrowUp color="green"/>} sign="+" totalValue={calculateTotalValue("green")}/>
+          <Cards text="Saídas" icon={<IconCircleArrowDown color="red"/>} sign="-" totalValue={calculateTotalValue("red")}/>
+          <Cards text="Total" icon={<IconCash/>} sign={difference >= 0 ? "+" : "-"} totalValue={difference}/>
         </div>
 
         <div>

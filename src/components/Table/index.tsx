@@ -11,7 +11,7 @@ export default function Table ({operations, remove}: TableTypes) {
     
     return (
         <>
-            <table className="w-full rounded-md">
+            <table className="w-full text-sm md:text-md lg:text-lg">
                <thead>
                     <tr>
                         <th>Descrição</th>
@@ -24,7 +24,7 @@ export default function Table ({operations, remove}: TableTypes) {
                     {operations && operations.map((operation: any) => (
                         <tr key={operation.id}>
                             <td>{operation.description}</td>
-                            <td className={operation.valueColor === "green" ? "text-green-600" : "text-red-600"}>
+                            <td className={`${operation.valueColor === "green" ? "text-green-600" : "text-red-600"}`}>
                                 {operation.valueColor === "green" ? "+" : "-"} R$ {operation.value.toFixed(2)}
                             </td>
                             <td className="w-[15%]">

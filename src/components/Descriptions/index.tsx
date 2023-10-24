@@ -12,11 +12,11 @@ interface InputsTypes {
 export default function Descriptions ({description, setDescription, value, setValue, clickButton, selectedOption, setSelectedOption}: InputsTypes) {  
     return (
         <>
-            <div className="flex flex-col gap-3 items-center justify-between md:flex-row px-5 py-3 text-gray-900 bg-white rounded-md">
+            <div className="flex flex-col gap-3 items-center justify-between md:flex-row px-5 py-3 text-gray-900 bg-white rounded-t-md border border-zinc-300">
                 <div>
                     <p>Descrição</p>
                     <input
-                        className="border border-gray-900 rounded-md outline-none px-2" 
+                        className="border border-zinc-400 rounded-md outline-none px-2" 
                         type="text"
                         value={description}
                         onChange={(ev) => setDescription(ev.target.value)}
@@ -26,7 +26,7 @@ export default function Descriptions ({description, setDescription, value, setVa
                 <div>
                     <p>Valor</p>
                     <input
-                        className="border border-gray-900 rounded-md outline-none px-2" 
+                        className="border border-zinc-400 rounded-md outline-none px-2" 
                         type="number"
                         value={value}
                         onChange={(ev) => setValue(ev.target.value)}
@@ -55,7 +55,7 @@ export default function Descriptions ({description, setDescription, value, setVa
                             checked={selectedOption === "out"}
                             onChange={(ev) => setSelectedOption(ev.target.value)}
                         />
-                        <label className="ms-1" htmlFor="outMoney">Saida</label>
+                        <label className="ms-1" htmlFor="outMoney">Saída</label>
                     </div>
                 </div>
 
