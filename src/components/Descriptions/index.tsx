@@ -60,7 +60,7 @@ export default function Descriptions ({description, setDescription, value, setVa
                 </div>
 
                 <div>
-                    <button className="bg-green-600 px-3 py-2 rounded-md text-white hover:bg-green-800 active:opacity-50" onClick={clickButton}>Adicionar</button>
+                    <button className="bg-sky-600 px-3 py-2 rounded-md text-white hover:bg-sky-800 active:opacity-50" onClick={clickButton}>Adicionar</button>
                 </div>
 
             </div>
